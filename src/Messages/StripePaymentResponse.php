@@ -22,8 +22,8 @@ class StripePaymentResponse implements PaymentResponse
 
     public function __construct(Event $event)
     {
-        $this->eventType = $event->object->object;
-        $this->charge = $event->object;
+        $this->eventType = $event->data->object->object;
+        $this->charge = $event->data->object;
     }
 
     public function wasSuccessful(): bool
