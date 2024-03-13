@@ -6,7 +6,7 @@ namespace Vanilo\Stripe\Messages;
 
 use Konekt\Enum\Enum;
 use Stripe\Event;
-use Stripe\PaymentIntent;
+use Stripe\Charge;
 use Vanilo\Payment\Contracts\PaymentResponse;
 use Vanilo\Payment\Contracts\PaymentStatus;
 use Vanilo\Payment\Models\PaymentStatusProxy;
@@ -16,19 +16,19 @@ class StripePaymentResponse implements PaymentResponse
 {
     protected string $eventType;
 
-    protected PaymentIntent $charge;
+    protected Charge $charge;
 
     protected ?PaymentStatus $status = null;
 
     public function __construct(Event $event)
     {
-        $this->eventType = $event->data->object->object;
+        $this->eventType = $event->type;
         $this->charge = $event->data->object;
     }
 
     public function wasSuccessful(): bool
     {
-        return PaymentIntent::STATUS_SUCCEEDED === $this->charge->status;
+        return Charge::STATUS_SUCCEEDED === $this->charge->status;
     }
 
     public function getMessage(): ?string
