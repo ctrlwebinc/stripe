@@ -16,7 +16,7 @@ class StripePaymentResponse implements PaymentResponse
 {
     protected string $eventType;
 
-    protected Charge $charge;
+    protected PaymentIntent $charge;
 
     protected ?PaymentStatus $status = null;
 
