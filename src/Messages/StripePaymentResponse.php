@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Vanilo\Stripe\Messages;
 
 use Konekt\Enum\Enum;
-use Stripe\Charge;
 use Stripe\Event;
+use Stripe\PaymentIntent;
 use Vanilo\Payment\Contracts\PaymentResponse;
 use Vanilo\Payment\Contracts\PaymentStatus;
 use Vanilo\Payment\Models\PaymentStatusProxy;
@@ -22,13 +22,13 @@ class StripePaymentResponse implements PaymentResponse
 
     public function __construct(Event $event)
     {
-        $this->eventType = $event->type;
-        $this->charge = $event->data->object;
+        $this->eventType = $event->object->object;
+        $this->charge = $event->object;
     }
 
     public function wasSuccessful(): bool
     {
-        return Charge::STATUS_SUCCEEDED === $this->charge->status;
+        return PaymentIntent::STATUS_SUCCEEDED === $this->charge->status;
     }
 
     public function getMessage(): ?string
@@ -56,7 +56,7 @@ class StripePaymentResponse implements PaymentResponse
 
     public function getPaymentId(): string
     {
-        return $this->charge->metadata->payment_id;
+        return $this->charge->id;
     }
 
     public function getStatus(): PaymentStatus

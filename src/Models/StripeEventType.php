@@ -18,5 +18,5 @@ class StripeEventType extends Enum
     public const CHARGE_SUCCEEDED = 'charge.succeeded';
     public const CHARGE_UPDATED = 'charge.updated';
 
-    protected static $unknownValuesFallbackToDefault = true;
+    protected static bool $unknownValuesFallbackToDefault = true;
 }
