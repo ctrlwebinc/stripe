@@ -42,7 +42,7 @@ class StripePaymentResponse implements PaymentResponse
 
     public function getTransactionId(): ?string
     {
-        return $this->charge->metadata->payment_id;
+        return $this->charge->id;
     }
 
     public function getAmountPaid(): ?float
@@ -56,7 +56,7 @@ class StripePaymentResponse implements PaymentResponse
 
     public function getPaymentId(): string
     {
-        return $this->charge->id;
+        return $this->charge->metadata->payment_id;
     }
 
     public function getStatus(): PaymentStatus
