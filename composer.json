@@ -20,7 +20,7 @@
     },
     "require": {
         "php": "^8.0",
-        "laravel/framework": "^9.2|^10.0",
+        "laravel/framework": "^9.2|^10.0|^11.0",
         "konekt/concord": "^1.5",
         "vanilo/payment": "^3.0",
         "vanilo/contracts": "^3.0",
