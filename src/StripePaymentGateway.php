@@ -20,6 +20,7 @@ use Vanilo\Payment\Contracts\Payment;
 use Vanilo\Payment\Contracts\PaymentGateway;
 use Vanilo\Payment\Contracts\PaymentRequest;
 use Vanilo\Payment\Contracts\PaymentResponse;
+use Vanilo\Payment\Contracts\TransactionHandler;
 use Vanilo\Stripe\Concerns\HasStripeInteraction;
 use Vanilo\Stripe\Factories\RequestFactory;
 use Vanilo\Stripe\Factories\ResponseFactory;
@@ -29,6 +30,8 @@ class StripePaymentGateway implements PaymentGateway
     use HasStripeInteraction;
 
     public const DEFAULT_ID = 'stripe';
+
+    private static ?string $svg = null;
 
     private ?RequestFactory $requestFactory = null;
 
@@ -44,7 +47,9 @@ class StripePaymentGateway implements PaymentGateway
         if (null === $this->requestFactory) {
             $this->requestFactory = new RequestFactory(
                 $this->secretKey,
-                $this->publicKey
+                $this->publicKey,
+                $this->returnUrl,
+                $this->createCustomer
             );
         }
 
@@ -57,7 +62,17 @@ class StripePaymentGateway implements PaymentGateway
             $this->responseFactory = new ResponseFactory();
         }
 
-        return $this->responseFactory->create($request, $options);
+        return $this->responseFactory->create($request, $options, $this->secretKey);
+    }
+
+    public static function svgIcon(): string
+    {
+        return self::$svg ??= file_get_contents(__DIR__ . '/resources/logo.svg');
+    }
+
+    public function transactionHandler(): ?TransactionHandler
+    {
+        return null;
     }
 
     public function isOffline(): bool

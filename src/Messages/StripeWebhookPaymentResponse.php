@@ -12,7 +12,7 @@ use Vanilo\Payment\Contracts\PaymentStatus;
 use Vanilo\Payment\Models\PaymentStatusProxy;
 use Vanilo\Stripe\Models\StripeEventType;
 
-class StripePaymentResponse implements PaymentResponse
+class StripeWebhookPaymentResponse implements PaymentResponse
 {
     protected string $eventType;
 
@@ -43,6 +43,11 @@ class StripePaymentResponse implements PaymentResponse
     public function getTransactionId(): ?string
     {
         return $this->charge->id;
+    }
+
+    public function getTransactionAmount(): float
+    {
+        return $this->getAmountPaid() ?? 0;
     }
 
     public function getAmountPaid(): ?float
@@ -85,6 +90,6 @@ class StripePaymentResponse implements PaymentResponse
 
     public function getNativeStatus(): Enum
     {
-        return StripeEventType::create($this->eventType);
+        return StripeEventType::create($this->charge->status);
     }
 }

@@ -18,31 +18,45 @@ class StripePaymentRequest implements PaymentRequest
 
     private string $currency;
 
-    private float $amount;
+    private string $description;
 
-    private ?string $returnUrl = null;
+    private ?string $customerId = null;
+
+    private float $amount;
 
     private string $view = 'stripe::_request';
 
     public function getHtmlSnippet(array $options = []): ?string
     {
         Stripe::setApiKey($this->secretKey);
-        $paymentIntent = PaymentIntent::create([
+        $intentData = [
             'amount' => $this->amount * 100,
             'currency' => $this->currency,
+            'description' => $this->description,
             'metadata' => [
-                'payment_id' => $this->paymentId
-            ]
-        ]);
+                'payment_id' => $this->paymentId,
+            ],
+        ];
+
+        if ($this->customerId) {
+            $intentData['customer'] = $this->customerId;
+        }
+
+        $paymentIntent = PaymentIntent::create($intentData);
 
         return View::make(
             $this->view,
             [
                 'publicKey' => $this->publicKey,
                 'intentSecret' => $paymentIntent->client_secret,
-                'returnUrl' => $this->returnUrl
+                'returnUrl' => $this->returnUrl,
             ]
         )->render();
+    }
+
+    public function getPublicKey()
+    {
+        return $this->publicKey;
     }
 
     public function willRedirect(): bool
@@ -85,6 +99,11 @@ class StripePaymentRequest implements PaymentRequest
         return $this;
     }
 
+    public function getRemoteId(): ?string
+    {
+        return null;
+    }
+
     public function setView(string $view): self
     {
         $this->view = $view;
@@ -92,9 +111,28 @@ class StripePaymentRequest implements PaymentRequest
         return $this;
     }
 
-    public function setReturnUrl(string $returnUrl): self
+    public function setReturnUrl(?string $returnUrl): self
     {
         $this->returnUrl = $returnUrl;
+
+        return $this;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function setCustomerId(string $customerId): StripePaymentRequest
+    {
+        $this->customerId = $customerId;
 
         return $this;
     }

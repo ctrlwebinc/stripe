@@ -7,10 +7,8 @@ namespace Vanilo\Stripe\Concerns;
 trait HasStripeConfiguration
 {
     use HasStripeCredentials;
-    //
-    //private string $returnUrl;
-    //
-    //private string $cancelUrl;
-    //
-    //private bool $isSandbox;
+
+    private ?string $returnUrl = null;
+
+    private ?bool $createCustomer = false;
 }

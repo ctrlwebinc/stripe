@@ -19,13 +19,12 @@
         "issues": "https://github.com/vanilophp/stripe"
     },
     "require": {
-        "php": "^8.0",
-        "laravel/framework": "^9.2|^10.0|^11.0",
-        "konekt/concord": "^1.5",
-        "vanilo/payment": "^3.0",
-        "vanilo/contracts": "^3.0",
+        "php": "^8.2",
+        "konekt/concord": "^1.13",
+        "laravel/framework": "^10.43|^11.0",
+        "vanilo/payment": "^4.1",
+        "vanilo/contracts": "^4.1",
         "stripe/stripe-php": "^7.75",
-        "konekt/concord": "^1.12",
         "konekt/enum": "^3.1.1 | ^4.0"
     },
     "autoload": {
@@ -35,8 +34,8 @@
     },
     "require-dev": {
         "ext-sqlite3": "*",
-        "orchestra/testbench": "~4.0|~5.0|~6.0",
-        "phpunit/phpunit" : "8 - 9"
+        "orchestra/testbench": "^8.0|^9.0",
+        "phpunit/phpunit" : "^10.0"
     },
     "autoload-dev": {
         "psr-4": {
@@ -48,7 +47,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0.x-dev"
+            "dev-master": "2.1.x-dev"
         }
     }
 }
